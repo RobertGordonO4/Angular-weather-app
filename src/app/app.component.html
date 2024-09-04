@@ -1,0 +1,95 @@
+<style>
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 6rem;
+    min-height: 100vh;
+  }
+
+  .searchSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 30vh;
+    width: 30vw;
+    text-align: center;
+  }
+
+  .searchInput {
+    height: 20%;
+    border-radius: 8px;
+    border: 1px solid skyblue;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .searchInput:focus-visible {
+    outline: 0px;
+    border-color: #448EE4;
+  }
+
+  .searchButton {
+    height: 20%;
+    border-radius: 8px;
+    border: 1px solid skyblue;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+    background-color: lightsteelblue;
+    overflow: clip;
+  }
+
+  .searchButton:hover {
+    background-color: #448EE4;
+    border-color: #448EE4;
+    color: white;
+  }
+
+  .image {
+    vertical-align: middle;
+  }
+
+  @media (max-width: 1024px) {
+    .searchSection {
+      height: 40vh;
+      width: 40vw;
+    }
+
+    .searchButton,
+    .searchInput {
+      font-size: 18px;
+    }
+  }
+</style>
+
+<main class="main">
+  <div class="searchSection">
+    <label htmlFor="city">Type in a city:</label>
+    <input (change)="handleCityChange($event)" class="searchInput" name="city" id="city" type="text" />
+    <p>Press underlying button to look up weather for the city</p>
+    <button class="searchButton" (click)="searchCityWeather(city)">Look up weather</button>
+  </div>
+  @if (weatherData && !callErrored) {
+  <div class="weatherInfo">
+    <div>City: {{weatherData.name}}</div>
+    <div>Country code: {{getName(weatherData.sys.country)}}</div>
+    <div>Current temperature: {{kelvinToCelsius(weatherData.main.temp)}} °C</div>
+    <div>Feels like: {{kelvinToCelsius(weatherData.main.feels_like)}} °C</div>
+    <div>Weather conditions:
+      @for (condition of weatherData.weather; track condition.id) {
+      {{condition.main}}&nbsp;
+      <img width="24" height="24" class="image" ngSrc="https://openweathermap.org/img/wn/{{condition.icon}}.png"
+        alt="Weather Condition primary" />&nbsp;
+      }
+    </div>
+    <div>Humidity: {{weatherData.main.humidity}} %</div>
+    <div>Wind speed: {{weatherData.wind.speed}} meters/s</div>
+  </div>
+  }
+</main>
+
+
+<router-outlet />
